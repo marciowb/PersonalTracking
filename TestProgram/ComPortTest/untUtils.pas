@@ -3,7 +3,7 @@ unit untUtils;
 interface
 
 uses
-SysUtils;
+SysUtils, Dialogs;
 
 const
   CharHi:array[0..255] of byte=(
@@ -70,9 +70,9 @@ type
 function ByteArrayToHex(var ary:array of byte;var str:String):Boolean;
 function ConvertHex(Hex : char) : integer;
 function HexToByte(hex : string): byte;
-procedure HexStringToByteArray(const str: string; BArray:ByteArray);
-function Crc16_chk(ptr:array of byte):byte;
-function Crc16_ver(ptr:array of byte):byte;
+procedure HexStringToByteArray(const str: string;var BArray:ByteArray);
+function Crc16_chk(const ptr:array of byte):byte;
+function Crc16_ver(var ptr:array of byte):byte;
 
 implementation
 
@@ -99,15 +99,14 @@ begin
 function ConvertHex(Hex : char) : integer;
 begin;
   case Hex of
-  'a': result := 10;
-  'b': result := 11;
-  'c': result := 12;
-  'd': result := 13;
-  'e': result := 14;
-  'f': result := 15;
+  'A': result := 10;
+  'B': result := 11;
+  'C': result := 12;
+  'D': result := 13;
+  'E': result := 14;
+  'F': result := 15;
   end;
   if StrToIntDef(Hex,11) < 10 then Result := StrToInt(Hex);
-  Result:=0;
 end;
 
 function HexToByte(hex : String): byte;
@@ -118,19 +117,18 @@ begin;
   Result:=Result+ConvertHex(hex[2]);
 end;
 
-procedure HexStringToByteArray(const str: string; BArray:ByteArray);
+procedure HexStringToByteArray(const str: string; var BArray:ByteArray);
 var
   i:integer;
 begin
      SetLength(BArray, Length(str) div 2);
-
      for i:=0 to High(BArray) do
      begin
           BArray[i]:=HexToByte(str[i*2+1]+str[i*2+2]);
      end;
 end;
 
-function Crc16_chk(ptr:array of byte):byte;
+function Crc16_chk(const ptr:array of byte):byte;
 var
   bInval, bCrcHi, bCrcLo:byte;
   nArraySize:integer;
@@ -153,6 +151,8 @@ begin
     bCrcLo:=CharLo[bInval];
   end;
 
+  ShowMessage(IntToStr(bCrcHi)+ ';' +IntToStr(bCrcLo) );
+
   if (bCrcHi<>0) or (bCrcLo <> 0)  then
   begin
     Result:=0;
@@ -162,7 +162,7 @@ begin
   Result:=1;
 end;
 
-function Crc16_ver(ptr:array of byte):byte;
+function Crc16_ver(var ptr:array of byte):byte;
 var
   bInval, bCrcHi, bCrcLo:byte;
   i:integer;

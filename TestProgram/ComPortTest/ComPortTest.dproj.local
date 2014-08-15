@@ -1,20 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.874,C:\Users\YAZILIM\Documents\Embarcadero\Studio\Projects\Project1.dproj=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\ComPortTest.dproj</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.453,=C:\Users\YAZILIM\Documents\Embarcadero\Studio\Projects\GroupedItems1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.587,C:\Users\YAZILIM\Documents\Embarcadero\Studio\Projects\Unit1.dfm=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\frmMain.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.726,D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\untUtils.pas=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.587,C:\Users\YAZILIM\Documents\Embarcadero\Studio\Projects\Unit1.pas=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\frmMain.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.504,=C:\Users\YAZILIM\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.233,=C:\Users\YAZILIM\Documents\Embarcadero\Studio\Projects\SplitItemDetail1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.374,D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\Unit1.pas=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\untSerialPortHelper.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.707,=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.614,=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\Unit1.pas</Transaction>
-    <Transaction>2014.08.14 13:44:13.478,=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\Unit1.pas</Transaction>
-    <Transaction>2014.08.14 13:44:57.920,D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\untSendingData.pas=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\Unit1.pas</Transaction>
-    <Transaction>2014.08.14 15:29:16.246,D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\untOutgoingData.pas=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\untSendingData.pas</Transaction>
-    <Transaction>2014.08.14 16:17:16.193,=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\Unit1.pas</Transaction>
-    <Transaction>2014.08.14 16:17:30.702,D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\untIncomingData.pas=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.193,=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.726,D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\untUtils.pas=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.707,=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.478,=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.481,D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\Unit1.pas=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\untSeriPortNativeThread.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.702,D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\untIncomingData.pas=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.374,D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\Unit1.pas=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\untSerialPortHelper.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.030,=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.233,=C:\Users\YAZILIM\Documents\Embarcadero\Studio\Projects\SplitItemDetail1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.246,D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\untOutgoingData.pas=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\untSendingData.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.504,=C:\Users\YAZILIM\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.587,C:\Users\YAZILIM\Documents\Embarcadero\Studio\Projects\Unit1.pas=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\frmMain.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.587,C:\Users\YAZILIM\Documents\Embarcadero\Studio\Projects\Unit1.dfm=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\frmMain.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.820,D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\untSeriPortNativeThread.pas=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\untSerialPortNativeThread.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.920,D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\untSendingData.pas=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.453,=C:\Users\YAZILIM\Documents\Embarcadero\Studio\Projects\GroupedItems1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.874,C:\Users\YAZILIM\Documents\Embarcadero\Studio\Projects\Project1.dproj=D:\BodeAG\Personel Tracking\TestProgram\ComPortTest\ComPortTest.dproj</Transaction>
   </Transactions>
 </BorlandProject>

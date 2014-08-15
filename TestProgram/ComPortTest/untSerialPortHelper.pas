@@ -3,7 +3,7 @@ unit untSerialPortHelper;
 interface
 
 uses
-  CPort, untUtils;
+  CPort, untUtils, Classes;
 
 type
   TSerialPortErrors = (speNoError = 0);

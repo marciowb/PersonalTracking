@@ -66,7 +66,7 @@ var
   i: Integer;
 
 begin
-  if Buffer[4] = $0F then
+  if Buffer[4] = $46 then
   begin
     bCommandLength:=Buffer[1];
     wSubstationID:= Buffer[2]*256 + Buffer[3];

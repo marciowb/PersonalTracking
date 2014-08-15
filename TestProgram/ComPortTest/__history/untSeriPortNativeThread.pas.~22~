@@ -1,0 +1,78 @@
+unit untSeriPortNativeThread;
+
+interface
+
+uses System, Classes, SysUtils, Winapi.Windows;
+
+type
+  TSerialPortNativeThread=class(TThread)
+    private
+      strCOMPort:string;
+      nBaundRate:integer;
+      hCOMFile:THandle;
+
+      function OpenPort(COMPort:string; BaundRate:integer):HANDLE_PTR;
+
+
+    protected
+      procedure Execute;override;
+
+    public
+      constructor Create(CreateSuspend:boolean; COMPort:string; BaundRate:integer);
+  end;
+
+implementation
+
+{ TSerialPortNativeThread }
+
+constructor TSerialPortNativeThread.Create(CreateSuspend: boolean;
+  COMPort: string; BaundRate: integer);
+begin
+  strCOMPort:=COMPort;
+  nBaundRate:=BaundRate;
+  inherited Create(CreateSuspend);
+end;
+
+procedure TSerialPortNativeThread.Execute;
+begin
+  inherited;
+
+end;
+
+function TSerialPortNativeThread.OpenPort(COMPort: string;
+  BaundRate: integer): HANDLE_PTR;
+var
+  setting: DCB;
+  timeouts: COMMTIMEOUTS;
+  dwLastError:DWORD;
+begin
+  hCOMFile:=CreateFile(PWideChar(COMPort),  GENERIC_WRITE or GENERIC_WRITE,
+                                                    0, nil,OPEN_EXISTING, 0,0);
+  if hCOMFile = INVALID_HANDLE_VALUE then
+  begin
+    dwLastError:=GetLastError;
+    Result:=-1;
+    exit;
+  end;
+
+  GetCommState(hCOMFile, @setting);
+
+  setting.BaudRate := CBR_9600;
+  setting.ByteSize := 8;
+  setting.Parity := NOPARITY;
+  setting.StopBits := ONESTOPBIT;
+
+  SetCommState(hCommFile, @setting);
+
+  timeouts.ReadIntervalTimeout := 20;
+  timeouts.ReadTotalTimeoutMultiplier := 10;
+  timeouts.ReadTotalTimeoutConstant := 100;
+  timeouts.WriteTotalTimeoutMultiplier := 100;
+  timeouts.WriteTotalTimeoutConstant := 1000;
+
+  SetCommTimeouts(hCommFile, @timeouts);
+  Result:=0;
+
+end;
+
+end.

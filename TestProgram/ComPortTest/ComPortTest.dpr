@@ -6,7 +6,8 @@ uses
   untSerialPortHelper in 'untSerialPortHelper.pas',
   untUtils in 'untUtils.pas',
   untOutgoingData in 'untOutgoingData.pas',
-  untIncomingData in 'untIncomingData.pas';
+  untIncomingData in 'untIncomingData.pas',
+  untSerialPortNativeThread in 'untSerialPortNativeThread.pas';
 
 {$R *.res}
 
