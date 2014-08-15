@@ -9,15 +9,15 @@ uses
 
 type
   TForm1 = class(TForm)
-    ComPort: TComPort;
     txtSendData: TEdit;
     Button1: TButton;
     procedure FormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
     SerialPort:TSerialPortHelper;
 
-    procedure SeriaPortOnDataReceived(Buffer:TSerialPortBuffer);
+    procedure SeriaPortOnDataReceived(Buffer:ByteArray);
   public
     { Public declarations }
   end;
@@ -29,15 +29,32 @@ implementation
 
 {$R *.dfm}
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.Button1Click(Sender: TObject);
+var
+  CPDevice:TSerialPortHelper;
+  Buffer:ByteArray;
+  str:string;
 begin
-  SerialPort:=TSerialPortHelper.Create('Com4');
-  SerialPort.OnDataReceived:=@SeriaPortOnDataReceived;
+  HexStringToByteArray(txtSendData.Text, ByteArray(Buffer));
+  SerialPort.Send(Buffer);
+  Sleep(100);
+  SerialPort.Read(Buffer);
+  ByteArrayToHex(Buffer, str);
+  ShowMessage(str);
 end;
 
-procedure TForm1.SeriaPortOnDataReceived(Buffer: TSerialPortBuffer);
+procedure TForm1.FormCreate(Sender: TObject);
 begin
+  SerialPort:=TSerialPortHelper.Create('Com4',9600);
+  SerialPort.OnDataReceived:=SeriaPortOnDataReceived;
+end;
 
+procedure TForm1.SeriaPortOnDataReceived(Buffer: ByteArray);
+var
+  str:string;
+begin
+  ByteArrayToHex(Buffer, str);
+  ShowMessage(str);
 end;
 
 end.

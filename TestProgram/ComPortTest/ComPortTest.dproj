@@ -92,6 +92,8 @@
         </DCCReference>
         <DCCReference Include="untSerialPortHelper.pas"/>
         <DCCReference Include="untUtils.pas"/>
+        <DCCReference Include="untOutgoingData.pas"/>
+        <DCCReference Include="untIncomingData.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

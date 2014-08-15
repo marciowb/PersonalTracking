@@ -1,26 +1,31 @@
 unit untSerialPortHelper;
 
 interface
+
 uses
-CPort;
+  CPort, untUtils;
 
 type
-  TSerialPortBuffer=array[0..1023] of byte;
-  TDataReceived=procedure(Buffer:TSerialPortBuffer) of object;
+  TSerialPortErrors = (speNoError = 0);
 
 type
-  TSerialPortHelper=class
-    private
-      ComPort:TComPort;
-      strComPort:string;
-      brBaundRate:TBaudRate;
-      EvtDataReceived:TDataReceived;
-    public
-      property OnDataReceived: TDataReceived read EvtDataReceived write EvtDataReceived;
+  TDataReceived = procedure(Buffer: ByteArray) of object;
 
-      constructor Create(Port: string; BaundRate:integer);
-      function Send(Buffer:TSerialPortBuffer):boolean;
-      procedure ComPortOnRxBuf(Sender:TObject);
+type
+  TSerialPortHelper = class
+  private
+    ComPort: TComPort;
+    strComPort: string;
+    brBaundRate: TBaudRate;
+    EvtDataReceived: TDataReceived;
+  public
+    property OnDataReceived: TDataReceived read EvtDataReceived
+      write EvtDataReceived;
+
+    constructor Create(Port: string; BaundRate: integer);
+    function Send(Buffer: ByteArray): TSerialPortErrors;
+    function Read(var Buffer: ByteArray): TSerialPortErrors;
+    procedure ComPortOnRxBuf(Sender: TObject; const Buffer; Count: integer);
 
   end;
 
@@ -28,43 +33,55 @@ implementation
 
 { TSerialPortHelper }
 
-procedure TSerialPortHelper.ComPortOnRxBuf(Sender: TObject);
-var
-  Buffer:TSerialPortBuffer;
+procedure TSerialPortHelper.ComPortOnRxBuf(Sender: TObject; const Buffer;
+  Count: integer);
 begin
-  ComPort.Read(Buffer, Length(Buffer));
+  // ComPort.Read(Buffer, Length(Buffer));
 
-  if(Assigned(EvtDataReceived)) then EvtDataReceived(Buffer);
+  if (Assigned(EvtDataReceived)) then
+    EvtDataReceived(ByteArray(Buffer));
 end;
 
-constructor TSerialPortHelper.Create(Port: string; BaundRate:integer);
+constructor TSerialPortHelper.Create(Port: string; BaundRate: integer);
 begin
-  inherited;
-
-  strComPort:=Port;
+  strComPort := Port;
 
   case BaundRate of
-    9600:brBaundRate:=TBaudRate.br9600;
-    2400:brBaundRate:=TBaudRate.br2400;
+    9600:
+      brBaundRate := TBaudRate.br9600;
+    2400:
+      brBaundRate := TBaudRate.br2400;
   end;
 
-  ComPort:=TComPort.Create(nil);
-  ComPort.Port:=Port;
+  ComPort := TComPort.Create(nil);
+  ComPort.Port := Port;
 
-  Comport.Open;
+  ComPort.Open;
 
-  ComPort.OnRxBuf:=@ComPortOnRxBuf;
-  
+  ComPort.OnRxBuf := ComPortOnRxBuf;
+
 end;
 
-function TSerialPortHelper.Send(Buffer: TSerialPortBuffer): boolean;
+function TSerialPortHelper.Read(var Buffer: ByteArray)
+  : TSerialPortErrors;
 begin
-  if ComPort.Connected then
-  begin
-    ComPort.Write(Buffer, Length(Buffer));
-  end;
+  if not ComPort.Connected then
+    ComPort.Open;
+
+  ComPort.Read(Buffer, Length(Buffer));
+
+  Result := TSerialPortErrors.speNoError;
+
 end;
 
+function TSerialPortHelper.Send(Buffer: ByteArray): TSerialPortErrors;
+begin
+  if not ComPort.Connected then
+    ComPort.Open;
 
+  ComPort.Write(Buffer, Length(Buffer));
+
+  Result := TSerialPortErrors.speNoError;
+end;
 
 end.

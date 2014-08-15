@@ -4,7 +4,9 @@ uses
   Vcl.Forms,
   frmMain in 'frmMain.pas' {Form1},
   untSerialPortHelper in 'untSerialPortHelper.pas',
-  untUtils in 'untUtils.pas';
+  untUtils in 'untUtils.pas',
+  untOutgoingData in 'untOutgoingData.pas',
+  untIncomingData in 'untIncomingData.pas';
 
 {$R *.res}
 
