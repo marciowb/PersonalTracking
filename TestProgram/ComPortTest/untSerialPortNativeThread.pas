@@ -16,6 +16,8 @@ type
     nBaundRate: integer;
     hCOMFile: NativeUInt;
     barReceivedByteArray: ByteArray;
+    bolConnected:boolean;
+    evtReceivedData: TReceivedData;
 
     function OpenPort(COMPort: string; BaundRate: integer): integer;
 
@@ -23,11 +25,10 @@ type
     procedure Execute; override;
 
   public
-
-    evtReceivedData: TReceivedData;
-
     property OnReceivedData: TReceivedData read evtReceivedData
       write evtReceivedData;
+
+    property Connected:boolean read bolConnected;
 
     constructor Create(CreateSuspend: boolean; COMPort: string;
       BaundRate: integer);
@@ -49,7 +50,11 @@ begin
   strCOMPort := COMPort;
   nBaundRate := BaundRate;
 
-  OpenPort(strCOMPort, nBaundRate);
+   if(OpenPort(strCOMPort, nBaundRate)<> 0) then
+    bolConnected:=false
+   else
+    bolConnected:=true;
+
 
   inherited Create(CreateSuspend);
 end;
@@ -101,18 +106,18 @@ begin
 
   GetCommState(hCOMFile, setting);
 
-  setting.BaudRate := CBR_9600;
+  setting.BaudRate := CBR_2400;
   setting.ByteSize := 8;
   setting.Parity := NOPARITY;
   setting.StopBits := ONESTOPBIT;
 
   SetCommState(hCOMFile, setting);
 
-  timeouts.ReadIntervalTimeout := 100;
-  timeouts.ReadTotalTimeoutMultiplier := 10;
-  timeouts.ReadTotalTimeoutConstant := 100;
-  timeouts.WriteTotalTimeoutMultiplier := 100;
-  timeouts.WriteTotalTimeoutConstant := 1000;
+  timeouts.ReadIntervalTimeout := 300;
+  timeouts.ReadTotalTimeoutMultiplier := 300;
+  timeouts.ReadTotalTimeoutConstant := 300;
+  timeouts.WriteTotalTimeoutMultiplier := 300;
+  timeouts.WriteTotalTimeoutConstant := 300;
 
   SetCommTimeouts(hCOMFile, timeouts);
   Result := 0;

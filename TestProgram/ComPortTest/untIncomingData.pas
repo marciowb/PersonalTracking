@@ -2,18 +2,18 @@ unit untIncomingData;
 
 interface
 
-uses Sysutils, DateUtils, untUtils;
+uses Sysutils, DateUtils, untUtils, Dialogs;
 
 type
   TCard=record
-    wCardDivision:Word;
-    bSeconds:byte;
-    wCardNumber:Word;
-    byteReaderNo:byte;
-    bolCarryFlag:Boolean;
-    bolLowVoltage:boolean;
-    bolGeneralAlarm:boolean;
-    bolEmergencyAlarm:boolean;
+    CardDivision:Word;
+    Seconds:byte;
+    CardNumber:Word;
+    ReaderNo:byte;
+    CarryFlag:Boolean;
+    LowVoltage:boolean;
+    GeneralAlarm:boolean;
+    EmergencyAlarm:boolean;
   end;
 
   CardArray=array of TCard;
@@ -89,14 +89,14 @@ begin
 
     for i := 0 to bCardCount - 1 do
     begin
-      tcaCards[i].wCardDivision:=PWORD(@Buffer[14+i*6])^;
-      tcaCards[i].bSeconds:= Buffer[(14+i*6)+2];
-      tcaCards[i].wCardNumber:=PWORD(@Buffer[(14+i*6)+3])^;
-      tcaCards[i].byteReaderNo:=Buffer[(14+i*6)+5] and $0F;
-      tcaCards[i].bolCarryFlag:=Boolean( Buffer[(14+i*6)+5] and $10);
-      tcaCards[i].bolLowVoltage:=Boolean(Buffer[(14+i*6)+5] and $20);
-      tcaCards[i].bolGeneralAlarm:=Boolean( Buffer[(14+i*6)+5] and $40);
-      tcaCards[i].bolEmergencyAlarm:=Boolean(Buffer[(14+i*6)+5] and $80);
+      tcaCards[i].CardDivision:=Buffer[14+i*6]*256+Buffer[(14+i*6)+1];
+      tcaCards[i].Seconds:= Buffer[(14+i*6)+2];
+      tcaCards[i].CardNumber:=Buffer[(14+i*6)+3]*256+Buffer[(14+i*6)+4]; //PWORD(@Buffer[(14+i*6)+3])^;
+      tcaCards[i].ReaderNo:=Buffer[(14+i*6)+5] and $0F;
+      tcaCards[i].CarryFlag:=Boolean( Buffer[(14+i*6)+5] and $10);
+      tcaCards[i].LowVoltage:=Boolean(Buffer[(14+i*6)+5] and $20);
+      tcaCards[i].GeneralAlarm:=Boolean( Buffer[(14+i*6)+5] and $40);
+      tcaCards[i].EmergencyAlarm:=Boolean(Buffer[(14+i*6)+5] and $80);
     end;
 
     wRandomCode:=PWORD(@Buffer[14+(bCardCount*6)])^;

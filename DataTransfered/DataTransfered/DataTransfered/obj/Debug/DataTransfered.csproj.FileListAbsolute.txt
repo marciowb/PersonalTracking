@@ -1,9 +1,0 @@
-D:\BodeAG\Personel Tracking\DataTransfered\DataTransfered\DataTransfered\bin\Debug\DataTransfered.exe.config
-D:\BodeAG\Personel Tracking\DataTransfered\DataTransfered\DataTransfered\bin\Debug\DataTransfered.exe
-D:\BodeAG\Personel Tracking\DataTransfered\DataTransfered\DataTransfered\bin\Debug\DataTransfered.pdb
-D:\BodeAG\Personel Tracking\DataTransfered\DataTransfered\DataTransfered\obj\Debug\DataTransfered.csprojResolveAssemblyReference.cache
-D:\BodeAG\Personel Tracking\DataTransfered\DataTransfered\DataTransfered\obj\Debug\DataTransfered.Form1.resources
-D:\BodeAG\Personel Tracking\DataTransfered\DataTransfered\DataTransfered\obj\Debug\DataTransfered.Properties.Resources.resources
-D:\BodeAG\Personel Tracking\DataTransfered\DataTransfered\DataTransfered\obj\Debug\DataTransfered.csproj.GenerateResource.Cache
-D:\BodeAG\Personel Tracking\DataTransfered\DataTransfered\DataTransfered\obj\Debug\DataTransfered.exe
-D:\BodeAG\Personel Tracking\DataTransfered\DataTransfered\DataTransfered\obj\Debug\DataTransfered.pdb

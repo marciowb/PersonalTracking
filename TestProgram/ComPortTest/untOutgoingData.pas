@@ -110,7 +110,7 @@ begin
     SetLength(Buffer, 19);
 
     Buffer[0] := bPilotSymbol;
-    Buffer[1] := $13;
+    Buffer[1] := $13; //Command Length
     Buffer[2] := wSubstationAddress div 256;
     Buffer[3] := wSubstationAddress mod 256;
     Buffer[4] := bCommandType;
@@ -124,8 +124,8 @@ begin
     Buffer[12] := bMaxNumberPeople;
     Buffer[13] := bAlarm;
     Buffer[14] := bWarning;
-    Buffer[15] := $00;
-    Buffer[16] := $00;
+    Buffer[15] := $00;  //Random code
+    Buffer[16] := $00;  //Random code
 
     Crc16_ver(Buffer);
   end;

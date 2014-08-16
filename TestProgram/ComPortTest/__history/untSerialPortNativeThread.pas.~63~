@@ -1,0 +1,171 @@
+unit untSerialPortNativeThread;
+{$M+}
+{$TYPEINFO ON}
+
+interface
+
+uses Classes, SysUtils, Winapi.Windows, untUtils;
+
+type
+  TReceivedData = procedure(Buffer: ByteArray) of Object;
+
+type
+  TSerialPortNativeThread = class(TThread)
+  private
+    strCOMPort: string;
+    nBaundRate: integer;
+    hCOMFile: NativeUInt;
+    barReceivedByteArray: ByteArray;
+    bolConnected:boolean;
+
+    function OpenPort(COMPort: string; BaundRate: integer): integer;
+
+  protected
+    procedure Execute; override;
+
+  public
+
+    evtReceivedData: TReceivedData;
+
+    property OnReceivedData: TReceivedData read evtReceivedData
+      write evtReceivedData;
+
+    property Connected:boolean read bolConnected;
+
+    constructor Create(CreateSuspend: boolean; COMPort: string;
+      BaundRate: integer);
+    destructor Destroy;override;
+    function Write(const Buffer: ByteArray): integer;
+    function Read(var Buffer: ByteArray): integer;
+
+    published
+      //property ProcessorCount;
+  end;
+
+implementation
+
+{ TSerialPortNativeThread }
+
+constructor TSerialPortNativeThread.Create(CreateSuspend: boolean;
+  COMPort: string; BaundRate: integer);
+begin
+  strCOMPort := COMPort;
+  nBaundRate := BaundRate;
+
+   if(OpenPort(strCOMPort, nBaundRate)<> 0) then
+    bolConnected:=false
+   else
+    bolConnected:=true;
+
+
+  inherited Create(CreateSuspend);
+end;
+
+destructor TSerialPortNativeThread.Destroy;
+begin
+  CloseHandle(hCOMFile);
+end;
+
+
+procedure TSerialPortNativeThread.Execute;
+var
+  NumberOfByteRead: integer;
+  Buffer: ByteArray;
+begin
+  inherited;
+  while true do
+  begin
+    NumberOfByteRead := Read(Buffer);
+    if (NumberOfByteRead <> 0) then
+    begin
+      Synchronize(
+        procedure
+        begin
+          if (Assigned(evtReceivedData)) then
+            evtReceivedData(Buffer);
+        end);
+
+    end;
+    Sleep(10);
+  end;
+end;
+
+function TSerialPortNativeThread.OpenPort(COMPort: string;
+BaundRate: integer): integer;
+var
+  setting: DCB;
+  timeouts: COMMTIMEOUTS;
+  dwLastError: DWORD;
+begin
+  hCOMFile := CreateFile(PWideChar(COMPort), GENERIC_WRITE or GENERIC_READ, 0,
+    nil, OPEN_EXISTING, 0, 0);
+  if hCOMFile = INVALID_HANDLE_VALUE then
+  begin
+    dwLastError := GetLastError;
+    Result := -1;
+    exit;
+  end;
+
+  GetCommState(hCOMFile, setting);
+
+  setting.BaudRate := CBR_9600;
+  setting.ByteSize := 8;
+  setting.Parity := NOPARITY;
+  setting.StopBits := ONESTOPBIT;
+
+  SetCommState(hCOMFile, setting);
+
+  timeouts.ReadIntervalTimeout := 100;
+  timeouts.ReadTotalTimeoutMultiplier := 10;
+  timeouts.ReadTotalTimeoutConstant := 100;
+  timeouts.WriteTotalTimeoutMultiplier := 100;
+  timeouts.WriteTotalTimeoutConstant := 1000;
+
+  SetCommTimeouts(hCOMFile, timeouts);
+  Result := 0;
+
+end;
+
+function TSerialPortNativeThread.Read(var Buffer: ByteArray): integer;
+var
+  NumberOfBytesRead: DWORD;
+  dwLastError: DWORD;
+begin
+  if(hCOMFile = INVALID_HANDLE_VALUE) then
+  begin
+    Result:=0;
+    exit;
+  end;
+
+  SetLength(Buffer, 1024);
+  if ReadFile(hCOMFile, PByte(Buffer)^, Length(Buffer), NumberOfBytesRead, nil)
+    = False then
+  begin
+    dwLastError := GetLastError;
+    Result := 0;
+    exit;
+  end;
+
+  SetLength(Buffer, NumberOfBytesRead);
+
+  Result := NumberOfBytesRead;
+end;
+
+function TSerialPortNativeThread.Write(const Buffer: ByteArray): integer;
+var
+  NumberWritten: Cardinal;
+begin
+  if(hCOMFile = INVALID_HANDLE_VALUE) then
+  begin
+    Result:=0;
+    exit;
+  end;
+
+  NumberWritten := 0;
+
+  WriteFile(hCOMFile, PChar(Buffer)^, Length(Buffer), NumberWritten, nil);
+
+  Result := NumberWritten;
+end;
+
+end.

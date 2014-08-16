@@ -85,11 +85,11 @@ begin
      begin
           if(Length(IntToHex(ary[i],1)) = 1) then
           begin
-               str:=Str+'0'+ IntToHex(ary[i],1)+ '-';
+               str:=Str+'0'+ IntToHex(ary[i],1);
           end
           else
           begin
-               str:=Str+IntToHex(ary[i],1) + '-';
+               str:=Str+IntToHex(ary[i],1);
           end;
      end;
 
