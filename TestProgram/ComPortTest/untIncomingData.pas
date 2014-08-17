@@ -9,6 +9,8 @@ type
     CardDivision:Word;
     Seconds:byte;
     CardNumber:Word;
+    CardNumberLo:byte;
+    CardNumberHi:byte;
     ReaderNo:byte;
     CarryFlag:Boolean;
     LowVoltage:boolean;
@@ -92,6 +94,8 @@ begin
       tcaCards[i].CardDivision:=Buffer[14+i*6]*256+Buffer[(14+i*6)+1];
       tcaCards[i].Seconds:= Buffer[(14+i*6)+2];
       tcaCards[i].CardNumber:=Buffer[(14+i*6)+3]*256+Buffer[(14+i*6)+4]; //PWORD(@Buffer[(14+i*6)+3])^;
+      tcaCards[i].CardNumberLo:=Buffer[(14+i*6)+4];
+      tcaCards[i].CardNumberHi:=Buffer[(14+i*6)+3];
       tcaCards[i].ReaderNo:=Buffer[(14+i*6)+5] and $0F;
       tcaCards[i].CarryFlag:=Boolean( Buffer[(14+i*6)+5] and $10);
       tcaCards[i].LowVoltage:=Boolean(Buffer[(14+i*6)+5] and $20);

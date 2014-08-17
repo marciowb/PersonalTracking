@@ -16,7 +16,7 @@ type
     nBaundRate: integer;
     hCOMFile: NativeUInt;
     barReceivedByteArray: ByteArray;
-    bolConnected:boolean;
+    bolConnected: boolean;
     evtReceivedData: TReceivedData;
 
     function OpenPort(COMPort: string; BaundRate: integer): integer;
@@ -28,16 +28,16 @@ type
     property OnReceivedData: TReceivedData read evtReceivedData
       write evtReceivedData;
 
-    property Connected:boolean read bolConnected;
+    property Connected: boolean read bolConnected;
 
     constructor Create(CreateSuspend: boolean; COMPort: string;
       BaundRate: integer);
-    destructor Destroy;override;
+    destructor Destroy; override;
     function Write(const Buffer: ByteArray): integer;
     function Read(var Buffer: ByteArray): integer;
 
-    published
-      //property ProcessorCount;
+  published
+    // property ProcessorCount;
   end;
 
 implementation
@@ -50,11 +50,10 @@ begin
   strCOMPort := COMPort;
   nBaundRate := BaundRate;
 
-   if(OpenPort(strCOMPort, nBaundRate)<> 0) then
-    bolConnected:=false
-   else
-    bolConnected:=true;
-
+  if (OpenPort(strCOMPort, nBaundRate) <> 0) then
+    bolConnected := false
+  else
+    bolConnected := true;
 
   inherited Create(CreateSuspend);
 end;
@@ -63,7 +62,6 @@ destructor TSerialPortNativeThread.Destroy;
 begin
   CloseHandle(hCOMFile);
 end;
-
 
 procedure TSerialPortNativeThread.Execute;
 var
@@ -104,22 +102,36 @@ begin
     exit;
   end;
 
+  SetupComm(hCOMFile, 5120, 128);
+
   GetCommState(hCOMFile, setting);
 
   setting.BaudRate := CBR_2400;
   setting.ByteSize := 8;
   setting.Parity := NOPARITY;
   setting.StopBits := ONESTOPBIT;
+  setting.XonLim := 2560;
+  setting.XonLim := 640;
+  setting.XonChar := #17;
+  setting.XoffChar := #19;
+  setting.ErrorChar := '?';
+  setting.EofChar := #0;
+  setting.EvtChar := #0;
 
   SetCommState(hCOMFile, setting);
 
-  timeouts.ReadIntervalTimeout := 300;
-  timeouts.ReadTotalTimeoutMultiplier := 300;
-  timeouts.ReadTotalTimeoutConstant := 300;
-  timeouts.WriteTotalTimeoutMultiplier := 300;
-  timeouts.WriteTotalTimeoutConstant := 300;
+  timeouts.ReadIntervalTimeout := 100;
+  timeouts.ReadTotalTimeoutMultiplier := 10;
+  timeouts.ReadTotalTimeoutConstant := 10;
+  timeouts.WriteTotalTimeoutMultiplier := 10;
+  timeouts.WriteTotalTimeoutConstant := 10;
 
   SetCommTimeouts(hCOMFile, timeouts);
+
+  SetCommMask(hCOMFile, EV_RXCHAR or EV_TXEMPTY or EV_ERR);
+  PurgeComm(hCOMFile, EV_CTS or EV_DSR or PURGE_TXCLEAR or PURGE_RXABORT or
+    PURGE_TXABORT);
+
   Result := 0;
 
 end;
@@ -129,15 +141,15 @@ var
   NumberOfBytesRead: DWORD;
   dwLastError: DWORD;
 begin
-  if(hCOMFile = INVALID_HANDLE_VALUE) then
+  if (hCOMFile = INVALID_HANDLE_VALUE) then
   begin
-    Result:=0;
+    Result := 0;
     exit;
   end;
 
   SetLength(Buffer, 1024);
   if ReadFile(hCOMFile, PByte(Buffer)^, Length(Buffer), NumberOfBytesRead, nil)
-    = False then
+    = false then
   begin
     dwLastError := GetLastError;
     Result := 0;
@@ -153,9 +165,9 @@ function TSerialPortNativeThread.Write(const Buffer: ByteArray): integer;
 var
   NumberWritten: Cardinal;
 begin
-  if(hCOMFile = INVALID_HANDLE_VALUE) then
+  if (hCOMFile = INVALID_HANDLE_VALUE) then
   begin
-    Result:=0;
+    Result := 0;
     exit;
   end;
 

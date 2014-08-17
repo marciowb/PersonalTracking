@@ -24,6 +24,7 @@ type
     { Private declarations }
     //SerialPort:TSerialPortHelper;
     SerialPort:TSerialPortNativeThread;
+    bolClear:Boolean;
 
     procedure SeriaPortOnDataReceived(Buffer:ByteArray);
   public
@@ -95,6 +96,7 @@ begin
   SerialPort:=TSerialPortNativeThread.Create(false, 'COM4', 9600);
   SerialPort.OnReceivedData:=SeriaPortOnDataReceived;
   if (not SerialPort.Connected) then ShowMessage('No Connection');
+  bolClear:=true;
 
 end;
 
@@ -112,12 +114,23 @@ begin
   IncomingData.Analyze(buffer);
   //lbxCards.Clear;
 
+  //lbxCards.Items.Clear;
+
+  str:=IntToStr(IncomingData.HeaderStatus) + ';' + BoolToStr(IncomingData.SubstationDCAC) + ';'+
+        BoolToStr(IncomingData.InterruptArea) + ';' + BoolToStr(IncomingData.EventsRecord);
+
+  lbxCards.Items.Add(str);
+
   for i := Low(IncomingData.Cards) to High(IncomingData.Cards) do
   begin
     str:= IntToStr(IncomingData.Cards[i].CardNumber)+';' +
       IntToStr(IncomingData.Cards[i].Seconds) +';' +
-      IntToStr(IncomingData.Cards[i].CardDivision);
-    if( lbxCards.Items.IndexOf(str) = -1) then lbxCards.Items.Add(str);
+      IntToStr(IncomingData.Cards[i].CardDivision)+';' +
+      IntToStr(IncomingData.Cards[i].CardNumberLo)+';' +
+      IntToStr(IncomingData.Cards[i].CardNumberHi);;
+    //if( lbxCards.Items.IndexOf(str) = -1) then lbxCards.Items.Add(str);
+
+    lbxCards.Items.Add(str);
 
       if(IncomingData.Cards[i].EmergencyAlarm) then ShowMessage(str);
 
@@ -137,10 +150,11 @@ begin
   OutgoingData:=TOutgoingData.Create;
   OutgoingData.SubStationAddress:=255;
   OutgoingData.TakeDateTimeFromMe:=false;
-  OutgoingData.ClearLastRecords:=false;
-  OutgoingData.ClearCommunicationDevice:=true;
+  OutgoingData.ClearLastRecords:=bolClear;
+  OutgoingData.ClearCommunicationDevice:=false;
+  OutgoingData.ClearIntterupts:=false;
   OutgoingData.MaxNumberPeopleReading:=15;
-  OutgoingData.Alarm:=0;
+  OutgoingData.Alarm:=10;
   OutgoingData.Warning:=0;
   OutgoingData.OtherCommands:=0;
 
@@ -150,6 +164,9 @@ begin
   txtSendData.Text:=str;
 
   if (SerialPort.Connected) then SerialPort.Write(Buffer);
+
+  bolClear:=not bolClear;
+
 end;
 
 end.
